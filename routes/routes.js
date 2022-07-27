@@ -50,7 +50,7 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
   try {
 
-    if (req.body.userId !== undefined) {
+    if (req.body.userId) {
       const user = await User.findOne({
         where: {
           userId: req.body.userId
@@ -109,7 +109,7 @@ router.get('/logout', verifyToken, async (req,res) => {
 
 router.post('/new', verifyToken, async (req,res) => {
 
-  if (req.body.postType === '' || req.body.title === '' || req.body.content === '' || !req.body.postType || !req.body.title || !req.body.content) {
+  if (!req.body.postType || !req.body.title || !req.body.content) {
     return res.status(404).json({ message: 'Невозможно создать запись - не все поля заполнены.' })
   }
 
@@ -177,7 +177,7 @@ router.put('/update/:id', verifyToken, async (req, res) => {
 
     if (req.userId === post.userId) {
 
-      if (req.body.title === '' || req.body.content === '' || !req.body.title || !req.body.content) {
+      if (!req.body.title || !req.body.content) {
         return res.status(404).json({ message: `Невозможно обновить запись id ${post.id} - не все поля заполнены.` })
       }
 
